@@ -1,0 +1,56 @@
+version: '3.8'
+
+x-base-app: &base_app
+  build:
+    context: .
+    dockerfile: Dockerfile
+  entrypoint: ['sh', './entrypoint.sh']
+  volumes:
+      - ".:/app:cached"
+      - bundle:/usr/local/bundle
+  stdin_open: true
+  tty: true
+  tmpfs:
+    - /tmp    
+  env_file:
+    - .env
+
+services:
+  shoe_store_api:
+    <<: *base_app
+    command: >
+      bash -c "RACK_ENV=${RACK_ENV} bundle exec puma --config config/puma.rb"
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - websocket
+      - postgres
+
+  websocket:
+    <<: *base_app
+    command: bash -c "websocketd --port=${WEBSOCKET_PORT} ruby inventory.rb"
+
+  postgres:
+    image: 'postgres:${PG_MAJOR}'
+    volumes:
+      - .psqlrc:/root/.psqlrc:ro
+      - postgres:/var/lib/postgresql/data
+      - ./log:/root/log:cached
+    environment:
+      PSQL_HISTFILE: /root/log/.psql_history
+      POSTGRES_PASSWORD: ${PG_PWD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    env_file:
+      - .env
+
+volumes:
+  bundle:
+  postgres:
+
+networks:
+  default:
+    external:
+      name: dev_ntw
