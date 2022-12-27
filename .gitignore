@@ -12,3 +12,5 @@ tmp/
 coverage/
 
 .psqlrc/
+
+.idea/
