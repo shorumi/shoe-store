@@ -2,9 +2,11 @@ require 'faye/websocket'
 require 'eventmachine'
 require 'json'
 
+require_relative '../../bin/worker'
 require_relative '../../app/workers/persist_shoe_sales_worker'
 
-Thread.new do
+
+# Thread.new do
   EM.run do
     logger ||= Logger.new(STDOUT)
     ws = Faye::WebSocket::Client.new("#{ENV.fetch('WEBSOCKET_URL')}:#{ENV.fetch('WEBSOCKET_PORT')}")
@@ -16,6 +18,6 @@ Thread.new do
       end
     end
   rescue StandardError => e
-    logger.error("WebserviceClient:: An unexpected Error occurred: #{e}")
+    logger.error("An unexpected Error occurred: #{e}")
   end
-end
+# end

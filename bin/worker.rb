@@ -9,7 +9,7 @@ require 'sneakers/handlers/maxretry'
 require 'active_job'
 require 'advanced_sneakers_activejob'
 
-require './app'
+require_relative '../app'
 
 AdvancedSneakersActiveJob.configure do |config|
   # Should AdvancedSneakersActiveJob try to handle unrouted messages?

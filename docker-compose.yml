@@ -40,7 +40,7 @@ services:
     <<: *base_app
     entrypoint: ['sh', './entrypoint.sh']
     command: >
-      bash -c "ruby server_control.rb run"
+      bash -c "rm -rf ./libs/clients/webservice_client.rb.pid && ruby server_control.rb run"
     depends_on:
       - websocket
       - postgres

@@ -8,8 +8,8 @@ require 'sinatra/activerecord'
 require 'sinatra/custom_logger'
 require 'pry-byebug'
 
-require './config/init'
-require './config/routes/init'
+require_relative './config/init'
+require_relative './config/routes/init'
 
 # :nocov:
 if Sinatra::Base.environment == :development
