@@ -4,7 +4,6 @@ x-base-app: &base_app
   build:
     context: .
     dockerfile: Dockerfile
-  entrypoint: ['sh', './entrypoint.sh']
   volumes:
       - ".:/app:cached"
       - bundle:/usr/local/bundle
@@ -18,6 +17,7 @@ x-base-app: &base_app
 services:
   shoe_store_api:
     <<: *base_app
+    entrypoint: ['sh', './entrypoint.sh']
     command: >
       bash -c "RACK_ENV=${RACK_ENV} bundle exec puma --config config/puma.rb"
     ports:
@@ -25,12 +25,28 @@ services:
     env_file:
       - .env
     depends_on:
-      - websocket
       - postgres
 
   websocket:
     <<: *base_app
-    command: bash -c "websocketd --port=${WEBSOCKET_PORT} ruby inventory.rb"
+    command: >
+      bash -c "websocketd --port=${WEBSOCKET_PORT} ruby inventory.rb"
+    ports:
+      - "${WEBSOCKET_PORT}:${WEBSOCKET_PORT}"
+    env_file:
+      - .env
+
+  shoe_sales_servless_handler:
+    <<: *base_app
+    entrypoint: ['sh', './entrypoint.sh']
+    command: >
+      bash -c "ruby server_control.rb run"
+    depends_on:
+      - websocket
+      - postgres
+      - rabbitmq
+    env_file:
+      - .env
 
   postgres:
     image: 'postgres:${PG_MAJOR}'
@@ -46,11 +62,31 @@ services:
     env_file:
       - .env
 
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    ports:
+      - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
+      - ${RABBITMQ_API_PORT}:${RABBITMQ_API_PORT}
+    volumes:
+      - "/data"
+      - ./rabbit/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./rabbit/plugins:/usr/lib/rabbitmq/plugins
+    env_file:
+      - .env
+    environment:
+      - RABBITMQ_PLUGINS_DIR=/opt/rabbitmq/plugins:/usr/lib/rabbitmq/plugins
+
+  sneakers:
+    <<: *base_app
+    command: rake sneakers:run --trace
+    depends_on:
+      - rabbitmq
+
 volumes:
   bundle:
   postgres:
 
 networks:
   default:
-    external:
       name: dev_ntw
+      external: true

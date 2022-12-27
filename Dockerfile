@@ -7,6 +7,7 @@ RUN apt-get update -qq \
     gnupg2 \
     libpq-dev \
     websocketd \
+    postgresql-client \
   && apt-get clean \
   && rm -rf /var/cache/apt/archives/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
