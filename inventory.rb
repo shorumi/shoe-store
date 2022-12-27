@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 
 require 'json'
+require 'securerandom'
 
 STDOUT.sync = true
 
@@ -12,6 +13,7 @@ RANDOMNESS = Array(1..3)
 loop do
   RANDOMNESS.sample.times do
     puts JSON.generate({
+      id: SecureRandom.uuid,
       store: STORE_STORES.sample,
       model: SHOES_MODELS.sample,
       inventory: INVENTORY.sample,
