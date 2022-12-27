@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV.fetch('PG_HOSTNAME', 'localhost') %>
+  username: <%= ENV.fetch('PG_USR', 'postgres') %>
+  password: <%= ENV.fetch('PG_PWD', 'Abc12345678') %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  database: shoe_store_development
+
+test:
+  <<: *default
+  database: shoe_store_test
+
+production:
+  url: <%= ENV.fetch('DATABASE_URL', 'localhost') %>
+  pool: <%= ENV.fetch('DB_POOL') || ENV.fetch('RAILS_MAX_THREADS') || 5 %>
+

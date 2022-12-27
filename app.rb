@@ -4,8 +4,10 @@ ENV['RACK_ENV'] ||= 'development'
 
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/activerecord'
+require 'sinatra/custom_logger'
+require 'pry-byebug'
 
-require './app/models/init'
 require './config/init'
 require './config/routes/init'
 
@@ -18,6 +20,9 @@ end
 
 class App < Sinatra::Application
   set :server, :puma
+  set :logger, Logger.new(STDOUT)
+
+  register Sinatra::ActiveRecordExtension
 
   configure :development do
     register Sinatra::Reloader

@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 require 'rubygems'
+require 'sneakers/tasks'
+require 'sinatra/activerecord'
+require 'sinatra/activerecord/rake'
 require 'bundler/setup'
+
+require './bin/worker'
 
 desc 'Load the environment'
 task :environment do
