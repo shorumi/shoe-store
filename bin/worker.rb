@@ -11,30 +11,9 @@ require 'advanced_sneakers_activejob'
 
 require_relative '../app'
 
-AdvancedSneakersActiveJob.configure do |config|
-  # Should AdvancedSneakersActiveJob try to handle unrouted messages?
-  # There are still no guarantees that unrouted message is not lost in case of network failure or process exit.
-  # Delayed unrouted messages are not handled.
-  config.handle_unrouted_messages = true
-
-  # Should Sneakers build-in runner (e.g. `rake sneakers:run`) run ActiveJob consumers?
-  # :include - yes
-  # :exclude - no
-  # :only - Sneakers runner will run _only_ ActiveJob consumers
-  #
-  # This setting might be helpful if you want to run ActiveJob consumers apart from native Sneakers consumers.
-  # In that case set strategy to :exclude and use `rake sneakers:run` for native and `rake sneakers:active_job` for ActiveJob consumers
-  config.activejob_workers_strategy = :include
-
-  # All delayed messages delays are rounded to seconds.
-  config.delay_proc = ->(timestamp) { (timestamp - Time.now.to_f).round } # integer result is expected
-
-  # Delayed queues can be filtered by this prefix (e.g. delayed:60 - queue for messages with 1 minute delay)
-  config.delayed_queue_prefix = 'delayed'
-
-  # Custom sneakers configuration for ActiveJob publisher & runner
-  config.sneakers = {
-    connection: Bunny.new(
+module Connection
+  def self.sneakers
+    @sneakers ||= Bunny.new(
       host: 'rabbitmq',
       vhost: '/',
       username: ENV['RABBITMQ_USER'],
@@ -43,17 +22,31 @@ AdvancedSneakersActiveJob.configure do |config|
       connection_timeout: 2,
       heartbeat: :server, # will use RabbitMQ setting
       continuation_timeout: ENV.fetch('BUNNY_CONTINUATION_TIMEOUT', 10_000).to_i
-    ),
-    exchange: 'activejob',
-    handler: AdvancedSneakersActiveJob::Handler
-  }
-
-  # Define custom delay for retries, but remember - each unique delay leads to new queue on RabbitMQ side
-  config.retry_delay_proc = ->(count) { AdvancedSneakersActiveJob::EXPONENTIAL_BACKOFF[count] }
-
-  # Connection for publisher (fallbacks to connection of consumers)
-  # config.publish_connection = Bunny.new('CUSTOM_URL', with: { other: 'options' })
-
-  # Log level of "rake sneakers:active_job" output
-  config.log_level = :info
+    )
+  end
 end
+
+Sneakers.configure(
+  connection: Connection.sneakers,
+  exchange: 'sneakers',
+  exchange_type: :direct,
+  prefetch: 10,
+  daemonize: false, # Send to background
+  workers: `nproc`.to_i, # Number of per-cpu processes to run
+  log: $stdout, # Log file
+  pid_path: 'sneakers.pid', # Pid file
+  timeout_job_after: 5.minutes, # Maximal seconds to wait for job
+  # prefetch: ENV['SNEAKERS_PREFETCH'].to_i, # Grab 10 jobs together. Better speed.
+  threads: 5, # Threadpool size (good to match prefetch)
+  env: ENV['RACK_ENV'], # Environment
+  durable: true, # Is queue durable?
+  ack: true, # Must we acknowledge?
+  heartbeat: 5, # Keep a good connection with broker
+  handler: Sneakers::Handlers::Maxretry,
+  retry_max_times: 10, # how many times to retry the failed worker process
+  retry_timeout: 3 * 60 * 1000 # how long between each worker retry duration
+)
+
+Sneakers.logger.level = Logger::INFO
+
+ActiveJob::Base.queue_adapter = :advanced_sneakers
