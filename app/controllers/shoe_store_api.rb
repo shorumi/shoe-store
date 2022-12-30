@@ -4,15 +4,11 @@ require 'sinatra/json'
 require 'sinatra/reloader'
 require 'sneakers'
 
-# require_relative '../entities/init'
-# require_relative '../repositories/init'
-# require_relative '../business/rules/init'
-# require_relative '../custom/exception_messages/init'
+require_relative '../business/rules/init'
 
 class ShoeStoreApi < Sinatra::Application
-  def initialize(app = nil, shoe_sales_webservice: ::Services::ShoeSalesWebservice)
+  def initialize(app = nil)
     super(app)
-    @shoe_sales_webservice = shoe_sales_webservice
   end
 
   configure :development do
@@ -21,6 +17,8 @@ class ShoeStoreApi < Sinatra::Application
 
   # ACTION METHODS COME HERE
   get '/shoe_sales' do
+    ::Business::Rules::QuantityAlert.call
+
     status 200
   end
 
