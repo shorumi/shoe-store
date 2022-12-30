@@ -37,11 +37,12 @@ Sneakers.configure(
   pid_path: 'sneakers.pid', # Pid file
   timeout_job_after: 5.minutes, # Maximal seconds to wait for job
   # prefetch: ENV['SNEAKERS_PREFETCH'].to_i, # Grab 10 jobs together. Better speed.
-  threads: 5, # Threadpool size (good to match prefetch)
+  threads: 10, # Threadpool size (good to match prefetch)
+  start_worker_delay: 10,
   env: ENV['RACK_ENV'], # Environment
   durable: true, # Is queue durable?
   ack: true, # Must we acknowledge?
-  heartbeat: 5, # Keep a good connection with broker
+  heartbeat: 2, # Keep a good connection with broker
   handler: Sneakers::Handlers::Maxretry,
   retry_max_times: 10, # how many times to retry the failed worker process
   retry_timeout: 3 * 60 * 1000 # how long between each worker retry duration
