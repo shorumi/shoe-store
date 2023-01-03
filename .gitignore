@@ -16,3 +16,5 @@ coverage/
 .idea/
 
 libs/clients/webservice_client.rb.pid
+
+log/
