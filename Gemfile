@@ -12,6 +12,10 @@ gem 'activesupport', '~> 7.0', '>= 7.0.4'
 # A high-performance RabbitMQ background processing framework for Ruby.
 gem 'advanced-sneakers-activejob'
 
+# Whenever is a Ruby gem that provides a clear syntax for writing and deploying
+# cron jobs.
+gem 'whenever', require: false
+
 # Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server) to be run as a daemon
 # and to be controlled by simple start/stop/restart commands
 gem 'daemons'

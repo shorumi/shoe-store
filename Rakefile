@@ -12,9 +12,9 @@ task :environment do
   @env = ENV['RACK_ENV'] || 'development'
 end
 
-namespace ":whatever_name_space_name" do
-  desc 'RAKE DESCRIPTION'
-  task(rake_task_name: :environment) do
-    # CODE COMES HERE!
+namespace :whenever do
+  desc 'Handle Quantity Alerts for inventory'
+  task(handle_quantity_alerts_task: :environment) do
+    ::Business::Rules::QuantityAlert.call
   end
 end
