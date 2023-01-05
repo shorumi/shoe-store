@@ -1,0 +1,1 @@
+require_relative 'inventory_representer'

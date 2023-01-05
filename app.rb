@@ -8,9 +8,13 @@ require 'sinatra/activerecord'
 require 'sinatra/custom_logger'
 require 'pry-byebug'
 
+require 'bundler/setup'
+require 'active_job'
+require 'sneakers'
+
 require_relative './config/init'
 require_relative './config/routes/init'
-require_relative 'app/workers/persist_shoe_sales_worker'
+require_relative './app/workers/init'
 
 # :nocov:
 if Sinatra::Base.environment == :development
