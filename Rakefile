@@ -4,8 +4,9 @@ require 'rubygems'
 require 'sneakers/tasks'
 require 'sinatra/activerecord/rake'
 require 'bundler/setup'
-
 require './bin/worker'
+
+require_relative 'app/business/rules/init'
 
 desc 'Load the environment'
 task :environment do

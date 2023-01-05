@@ -8,7 +8,7 @@ require_relative '../../app/workers/persist_shoe_sales_worker'
 return unless ENV.fetch('SANDBOX_MODE', 'true') == 'false'
 
 EM.run do
-  logger ||= Logger.new(STDOUT)
+  logger ||= Logger.new($stdout)
   ws = Faye::WebSocket::Client.new("#{ENV.fetch('WEBSOCKET_URL')}:#{ENV.fetch('WEBSOCKET_PORT')}")
 
   ws.on :message do |event|

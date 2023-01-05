@@ -25,7 +25,7 @@ end
 
 class App < Sinatra::Application
   set :server, :puma
-  set :logger, Logger.new(STDOUT)
+  set :logger, Logger.new($stdout)
 
   register Sinatra::ActiveRecordExtension
 

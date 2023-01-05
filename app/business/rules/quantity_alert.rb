@@ -9,8 +9,8 @@ module Business
     class QuantityAlert
       QUANTITY_ALERTS = {
         'nothing' => 0,
-        'low' => 1..100,
-        'high' => 100..1000
+        'low' => 10..50,
+        'high' => 200..400
       }.freeze
 
       def self.call(repo = ::Repositories::Inventory.new)
