@@ -16,6 +16,9 @@ gem 'advanced-sneakers-activejob'
 # cron jobs.
 gem 'whenever', require: false
 
+# Resource-Oriented Architectures in Ruby.
+gem 'roar-jsonapi'
+
 # Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server) to be run as a daemon
 # and to be controlled by simple start/stop/restart commands
 gem 'daemons'

@@ -2,9 +2,8 @@
 
 require 'sinatra/json'
 require 'sinatra/reloader'
-require 'sneakers'
 
-require_relative '../business/rules/init'
+require_relative '../services/init'
 
 class ShoeStoreApi < Sinatra::Application
   def initialize(app = nil)
@@ -16,13 +15,17 @@ class ShoeStoreApi < Sinatra::Application
   end
 
   # ACTION METHODS COME HERE
-  get '/shoe_sales' do
-    ::Business::Rules::QuantityAlert.call
+  get '/inventories' do
+    success = lambda { |response|
+      body json(response)
+      status 200
+    }
 
-    status 200
+    error = lambda { |response|
+      body json(error: response)
+      status 400
+    }
+
+    ::Services::InventoryJsonApiResponse.call(success: success, error: error, params: params, request: request)
   end
-
-  private
-
-  attr_reader :shoe_sales_webservice
 end
