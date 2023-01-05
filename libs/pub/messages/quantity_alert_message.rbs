@@ -1,0 +1,13 @@
+module Pub
+  module Messages
+    class QuantityAlertMessage
+      def self.call: (row: Hash[String, untyped]) -> void
+
+      private
+
+      attr_reader self.row: Hash[String, untyped]
+
+      def self.build_message: (row: Hash[String, untyped]) -> JSON
+    end
+  end
+end

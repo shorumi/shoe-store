@@ -1,0 +1,11 @@
+module Workers
+  class QuantityAlertsConsumer
+    include Sneakers::Worker
+
+    def work: (message: String) -> void
+
+    private
+
+    def logger: () -> Logger
+  end
+end

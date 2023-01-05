@@ -1,0 +1,9 @@
+class PersistShoeSalesWorker < ActiveJob::Base
+  def perform: (sale_data: Hash[String, untyped]) -> void
+
+  private
+
+  def logger: () -> Logger
+
+  def inventory_repo: () -> Repositories::Inventory
+end

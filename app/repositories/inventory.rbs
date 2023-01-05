@@ -1,0 +1,17 @@
+module Repositories
+  class Inventory
+    def initialize: (model: ::Entities::Inventory) -> void
+
+    def all: () -> Array[::Entities::Inventory]
+
+    def create: (data: Hash[Symbol, any]) -> ::Entities::Inventory
+
+    def quantity_grouped_by_store_and_model_model_sql: () -> Array[Hash[Symbol, any]]
+
+    def paginate: (?page: ::Integer, ?per_page: ::Integer, ?order: ::String) -> Array[::Entities::Inventory]
+
+    private
+
+    attr_reader model: ::Entities::Inventory
+  end
+end

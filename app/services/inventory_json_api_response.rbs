@@ -1,0 +1,49 @@
+module Services
+  class InventoryJsonApiResponse
+    def self.call: (
+        inventory_repo: Repositories::Inventory,
+        logger: Logger,
+        ?success: Proc,
+        ?error: Proc,
+        ?params: Hash[String, untyped],
+        ?request: Hash[Symbol, untyped]
+    ) -> untyped
+
+    def call: () -> untyped
+
+    private
+
+    attr_reader inventory_repo: Repositories::Inventory
+
+    attr_reader logger: Logger
+
+    attr_reader success: Proc
+
+    attr_reader error: Proc
+
+    attr_reader params: Hash[String, untyped]
+
+    attr_reader request: Hash[Symbol, untyped]
+
+    def initialize: (
+        inventory_repo: Repositories::Inventory,
+        logger: Logger,
+        success: Proc,
+        error: Proc,
+        params: Hash[String, untyped],
+        request: Hash[Symbol, untyped]
+    ) -> void
+
+    def build_inventory_response: () -> Proc
+
+    def inventory_representer: (collection: Array[Entities::Inventory]) -> Hash[Symbol, untyped]
+
+    def order: () -> String
+
+    def page: () -> Integer
+
+    def per_page: () -> Integer
+
+    def total: () -> Integer
+  end
+end

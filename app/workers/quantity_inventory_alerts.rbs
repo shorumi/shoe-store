@@ -1,0 +1,5 @@
+module Workers
+  class QuantityInventoryAlerts < ActiveJob::Base
+    def perform: (message: String) -> void
+  end
+end
