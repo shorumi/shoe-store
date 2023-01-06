@@ -26,6 +26,6 @@ class ShoeStoreApi < Sinatra::Application
       status 400
     }
 
-    ::Services::InventoryJsonApiResponse.call(success: success, error: error, params: params, request: request)
+    ::Services::InventoryJsonApiResponse.call(success:, error:, params:, request:)
   end
 end

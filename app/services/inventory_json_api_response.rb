@@ -5,7 +5,7 @@ require_relative '../representers/init'
 
 module Services
   class InventoryJsonApiResponse
-    def self.call(inventory_repo = ::Repositories::Inventory.new, logger = Logger.new($stdout), success: nil, error: nil, params: nil, request: nil)
+    def self.call(inventory_repo = ::Repositories::Inventory.new, logger = Logger.new($stdout), success:, error:, params:, request:)
       new(inventory_repo, logger, success, error, params, request).call
     end
 
@@ -33,7 +33,7 @@ module Services
       logger.info "Inventory response: #{response}"
       success.call(response)
     rescue StandardError => e
-      logger.error("Request failed: #{e}")
+      logger.error("Request failed: #{e} - #{e.backtrace}")
       error.call('Unable to process request at this time, please try again later.')
     end
 

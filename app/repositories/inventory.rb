@@ -16,7 +16,7 @@ module Repositories
       model.create(sales_data: data)
     end
 
-    def quantity_grouped_by_store_and_model_model_sql
+    def quantity_grouped_by_store_and_model_sql
       model.connection.execute(
         <<-SQL.squish
           SELECT (sales_data->>'store') AS store,

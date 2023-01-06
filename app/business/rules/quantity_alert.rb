@@ -31,7 +31,7 @@ module Business
 
       def perform_quantity_alerts
         logger.info('Performing quantity alerts')
-        if (inventory_items = repo.quantity_grouped_by_store_and_model_model_sql)
+        if (inventory_items = repo.quantity_grouped_by_store_and_model_sql)
           inventory_items.each do |row|
             quantity = row.fetch('inventory_quantity').to_i
 

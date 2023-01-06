@@ -1,17 +1,17 @@
 module Repositories
   class Inventory
-    def initialize: (model: ::Entities::Inventory) -> void
+    def initialize: (model: ::Entities::Inventory::ActiveRecord_Relation) -> void
 
-    def all: () -> Array[::Entities::Inventory]
+    def all: () -> Array[::Entities::Inventory::ActiveRecord_Relation]
 
-    def create: (data: Hash[Symbol, any]) -> ::Entities::Inventory
+    def create: (data: Hash[Symbol, any]) -> ::Entities::Inventory::ActiveRecord_Relation
 
-    def quantity_grouped_by_store_and_model_model_sql: () -> Array[Hash[Symbol, any]]
+    def quantity_grouped_by_store_and_model_sql: () -> Array[Hash[Symbol | String, any]]
 
-    def paginate: (?page: ::Integer, ?per_page: ::Integer, ?order: ::String) -> Array[::Entities::Inventory]
+    def paginate: (?page: ::Integer, ?per_page: ::Integer, ?order: ::String) -> Array[::Entities::Inventory::ActiveRecord_Relation]
 
     private
 
-    attr_reader model: ::Entities::Inventory
+    attr_reader model: ::Entities::Inventory::ActiveRecord_Relation
   end
 end

@@ -5,7 +5,7 @@ module Services
         logger: Logger,
         ?success: Proc,
         ?error: Proc,
-        ?params: Hash[String, untyped],
+        ?params: Hash[String | Symbol, untyped],
         ?request: Hash[Symbol, untyped]
     ) -> untyped
 
@@ -21,7 +21,7 @@ module Services
 
     attr_reader error: Proc
 
-    attr_reader params: Hash[String, untyped]
+    attr_reader params: Hash[String | Symbol, untyped]
 
     attr_reader request: Hash[Symbol, untyped]
 
@@ -30,7 +30,7 @@ module Services
         logger: Logger,
         success: Proc,
         error: Proc,
-        params: Hash[String, untyped],
+        params: Hash[String | Symbol, untyped],
         request: Hash[Symbol, untyped]
     ) -> void
 
