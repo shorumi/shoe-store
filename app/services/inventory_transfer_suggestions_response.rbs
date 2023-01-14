@@ -1,21 +1,24 @@
 module Services
-  class InventoryJsonApiResponse
+  class InventoryTransferSuggestionsResponse
     def self.call: (
         inventory_repo: Repositories::Inventory,
         logger: Logger,
+        renderer: JSONAPI::Serializable::Renderer,
         ?success: Proc,
         ?error: Proc,
         ?params: Hash[String | Symbol, untyped],
         ?request: Hash[Symbol, untyped]
-    ) -> untyped
+      ) -> untyped
 
-    def call: () -> untyped
+    def call: () -> Proc
 
     private
 
     attr_reader inventory_repo: Repositories::Inventory
 
     attr_reader logger: Logger
+
+    attr_reader renderer: JSONAPI::Serializable::Renderer
 
     attr_reader success: Proc
 
@@ -28,22 +31,13 @@ module Services
     def initialize: (
         inventory_repo: Repositories::Inventory,
         logger: Logger,
+        renderer: JSONAPI::Serializable::Renderer,
         success: Proc,
         error: Proc,
         params: Hash[String | Symbol, untyped],
         request: Hash[Symbol, untyped]
-    ) -> void
+      ) -> InventoryTransferSuggestionsResponse
 
-    def build_inventory_response: () -> Proc
-
-    def inventory_representer: (collection: Array[Entities::Inventory]) -> Hash[Symbol, untyped]
-
-    def order: () -> String
-
-    def page: () -> Integer
-
-    def per_page: () -> Integer
-
-    def total: () -> Integer
+    def build_inventory_transfer_suggestions_response: () -> Proc
   end
 end

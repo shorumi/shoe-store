@@ -3,19 +3,19 @@ module Business
     class QuantityAlert
       QUANTITY_ALERTS: ::Hash[::String, 0 | ::Range[::Integer]]
 
-      def self.call: (repo: ::Repositories::Inventory) -> void
+      def self.call: (inventory_repo: ::Repositories::Inventory, logger: Logger) -> void
 
       def call: () -> void
 
       private
 
-      attr_reader repo: ::Repositories::Inventory
+      attr_reader inventory_repo: ::Repositories::Inventory
 
-      def initialize: (repo: ::Repositories::Inventory) -> void
+      attr_reader logger: ::Logger
 
-      def perform_quantity_alerts: () -> untyped
+      def initialize: (inventory_repo: ::Repositories::Inventory, logger: Logger ) -> Business::Rules::QuantityAlert
 
-      def logger: () -> ::Logger
+      def perform_quantity_alerts: () -> void
 
       def publish_alert: (row: ::Repositories::Inventory) -> JSON
     end

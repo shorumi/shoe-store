@@ -1,0 +1,51 @@
+module Services
+  class InventoryResponse
+    def self.call: (
+        inventory_repo: Repositories::Inventory,
+        logger: Logger,
+        renderer: JSONAPI::Serializable::Renderer,
+        ?success: Proc,
+        ?error: Proc,
+        ?params: Hash[String | Symbol, untyped],
+        ?request: Hash[Symbol, untyped]
+    ) -> untyped
+
+    def call: () -> Proc
+
+    private
+
+    attr_reader inventory_repo: Repositories::Inventory
+
+    attr_reader logger: Logger
+
+    attr_reader renderer: JSONAPI::Serializable::Renderer
+
+    attr_reader success: Proc
+
+    attr_reader error: Proc
+
+    attr_reader params: Hash[String | Symbol, untyped]
+
+    attr_reader request: Hash[Symbol, untyped]
+
+    def initialize: (
+        inventory_repo: Repositories::Inventory,
+        logger: Logger,
+        renderer: JSONAPI::Serializable::Renderer,
+        success: Proc,
+        error: Proc,
+        params: Hash[String | Symbol, untyped],
+        request: Hash[Symbol, untyped]
+    ) -> InventoryResponse
+
+    def build_inventory_response: () -> Proc
+
+    def order: () -> String
+
+    def page: () -> Integer
+
+    def per_page: () -> Integer
+
+    def total: () -> Integer
+  end
+end

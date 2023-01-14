@@ -6,12 +6,20 @@ module Repositories
 
     def create: (data: Hash[Symbol, any]) -> ::Entities::Inventory::ActiveRecord_Relation
 
-    def quantity_grouped_by_store_and_model_sql: () -> Array[Hash[Symbol | String, any]]
+    def quantity_grouped_by_store_and_model_sql: () -> PG::Result
 
     def paginate: (?page: ::Integer, ?per_page: ::Integer, ?order: ::String) -> Array[::Entities::Inventory::ActiveRecord_Relation]
+
+    def inventory_suggestions: () -> PG::Result
 
     private
 
     attr_reader model: ::Entities::Inventory::ActiveRecord_Relation
+
+    def sum_quantity_by_store_and_model: () -> String
+
+    def inventory_suggestions_sql: () -> String
+
+    def execute_raw_query: (query: String) -> PG::Result
   end
 end

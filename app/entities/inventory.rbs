@@ -1,4 +1,0 @@
-module Entities
-  class Inventory < ActiveRecord::Base
-  end
-end
