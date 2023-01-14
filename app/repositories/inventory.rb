@@ -68,6 +68,9 @@ module Repositories
       SQL
     end
 
+    # This method is used to execute raw sql queries
+    # And PG::BasicTypeMapForResults is used to convert the PG JSON_AGG result from String to Hash
+    # Due to the fact ACTIVERECORD is not able to convert the JSON_AGG result from String to Hash
     def execute_raw_query(sql)
       model.connection.raw_connection.type_map_for_results = PG::BasicTypeMapForResults.new(model.connection.raw_connection)
       model.connection.execute(sql)
