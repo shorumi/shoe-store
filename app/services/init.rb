@@ -1,1 +1,2 @@
-require_relative 'inventory_json_api_response'
+require_relative 'inventory_response'
+require_relative 'inventory_transfer_suggestions_response'
