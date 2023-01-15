@@ -5,6 +5,7 @@ require 'jsonapi/serializable/renderer'
 require_relative '../repositories/init'
 require_relative '../serializables/init'
 require_relative '../entities/init'
+require_relative '../../libs/utils/pagination'
 
 
 module Services
@@ -40,17 +41,18 @@ module Services
     end
 
     def build_inventory_response
-      inventories = inventory_repo.paginate(page:, per_page:, order:)
+      paginated_inventory_items ||= ::Utils::Pagination.paginate(params, collection: Entities::Inventory)
+
       response ||= renderer.render(
-        inventories,
+        paginated_inventory_items,
         class: {
           'Entities::Inventory': ::Serializables::Inventory
         },
         meta: {
-          page:,
-          per_page:,
-          order:,
-          total:
+          page: params.fetch(:page, Utils::Pagination::PAGE_DEFAULT[:page]).to_i,
+          per_page: params.fetch(:per_page, Utils::Pagination::PAGE_DEFAULT[:per_page]).to_i,
+          order: params.fetch(:order, Utils::Pagination::PAGE_DEFAULT[:order]),
+          total: inventory_repo.count
         }
       )
 
@@ -59,23 +61,6 @@ module Services
     rescue StandardError => e
       logger.error("Request failed: #{e} - #{e.backtrace}")
       error.call('Unable to process request at this time, please try again later.')
-    end
-
-    # TODO: Add a Pagination class to handle this logic in a near future.
-    def order
-      params.fetch(:order, 'desc').upcase
-    end
-
-    def page
-      params.fetch(:page, 1)
-    end
-
-    def per_page
-      params.fetch(:per_page, 10)
-    end
-
-    def total
-      inventory_repo.all.count
     end
   end
 end

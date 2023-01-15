@@ -1,5 +1,10 @@
+# frozen_string_literal: true
+require 'jsonapi/serializable/renderer'
+
+require_relative '../entities/init'
 require_relative '../repositories/init'
 require_relative '../serializables/init'
+require_relative '../../libs/utils/pagination'
 
 module Services
   class InventoryTransferSuggestionsResponse
@@ -34,11 +39,19 @@ module Services
     end
 
     def build_inventory_transfer_suggestions_response
-      inventory_transfer_suggestions = inventory_repo.inventory_transfer_suggestions.to_a
+      inventory_transfer_suggestions ||= inventory_repo.inventory_transfer_suggestions.to_a
+      paginated_inventory_transfer_suggestions ||= ::Utils::Pagination.paginate(params, collection: inventory_transfer_suggestions)
+
       response = renderer.render(
-        inventory_transfer_suggestions,
+        paginated_inventory_transfer_suggestions,
         class: {
           Hash: ::Serializables::InventoryTransferSuggestions
+        },
+        meta: {
+          page: params.fetch(:page, Utils::Pagination::PAGE_DEFAULT[:page]),
+          per_page: params.fetch(:per_page, Utils::Pagination::PAGE_DEFAULT[:per_page]),
+          order: params.fetch(:order, Utils::Pagination::PAGE_DEFAULT[:order]),
+          total: inventory_transfer_suggestions.count
         }
       )
 

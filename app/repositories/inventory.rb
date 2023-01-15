@@ -13,6 +13,10 @@ module Repositories
       model.all
     end
 
+    def count
+      model.count
+    end
+
     def create(data:)
       model.create(sales_data: data)
     end
@@ -21,9 +25,8 @@ module Repositories
       execute_raw_query("#{sum_quantity_by_store_and_model};")
     end
 
-    def paginate(page: 1, per_page: 10, order: 'desc')
-      page = page.to_i - 1 if page.to_i == 1
-      model.order(id: order.to_sym).limit(per_page.to_i).offset(page.to_i * per_page.to_i)
+    def paginate(offset:, per_page:, order:)
+      model.order(id: order.to_sym).limit(per_page.to_i).offset(offset)
     end
 
     def inventory_transfer_suggestions
