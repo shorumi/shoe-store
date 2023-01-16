@@ -22,7 +22,7 @@ module Repositories
     end
 
     def quantity_grouped_by_store_and_model
-      execute_raw_query("#{sum_quantity_by_store_and_model};")
+      execute_raw_query("#{sum_quantity_by_store_and_model_sql};")
     end
 
     def paginate(offset:, per_page:, order:)

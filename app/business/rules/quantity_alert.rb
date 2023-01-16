@@ -39,19 +39,19 @@ module Business
             case quantity
             when QUANTITY_ALERTS['low']
               logger.info("Only #{quantity} shoes left for store: #{row['store']} and model: #{row['model']}")
-              publish_alert ||= publish_alert(row.merge!(alert_type: 'low_shoes_quantity'))
+              publish_alert_message = build_publish_alert_message(row.merge!(alert_type: 'low_shoes_quantity'))
 
-              ::Workers::QuantityInventoryAlerts.set(priority: 9).perform_later(publish_alert)
+              enqueue_alerts(publish_alert_message, priority: 9)
             when QUANTITY_ALERTS['high']
               logger.info("A High number of #{quantity} shoes for store: #{row['store']} and model: #{row['model']}")
-              publish_alert ||= publish_alert(row.merge!(alert_type: 'high_shoes_quantity'))
+              publish_alert_message = build_publish_alert_message(row.merge!(alert_type: 'high_shoes_quantity'))
 
-              ::Workers::QuantityInventoryAlerts.set(priority: 10).perform_later(publish_alert)
+              enqueue_alerts(publish_alert_message, priority: 10)
             when QUANTITY_ALERTS['out_of_stock']
               logger.info("Out of stock for store: #{row['store']} and model: #{row['model']}")
-              publish_alert ||= publish_alert(row.merge!(alert_type: 'out_of_stock'))
+              publish_alert_message ||= build_publish_alert_message(row.merge!(alert_type: 'out_of_stock'))
 
-              ::Workers::QuantityInventoryAlerts.set(priority: 11).perform_later(publish_alert)
+              enqueue_alerts(publish_alert_message, priority: 11)
             else
               next
             end
@@ -61,8 +61,12 @@ module Business
         end
       end
 
-      def publish_alert(row)
+      def build_publish_alert_message(row)
         Pub::Messages::QuantityAlertMessage.call(row)
+      end
+
+      def enqueue_alerts(publish_alert_message, priority:)
+        ::Workers::QuantityInventoryAlerts.set(priority:).perform_later(publish_alert_message)
       end
     end
   end
