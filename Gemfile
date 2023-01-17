@@ -19,6 +19,12 @@ gem 'whenever', require: false
 # Efficient and convenient JSON API library for ruby.
 gem 'jsonapi-rb'
 
+# Data validation library that provides a powerful DSL for defining schemas and validation rules.
+gem 'dry-validation'
+
+# A set of tools for working with monads in Ruby
+gem 'dry-monads'
+
 # Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server) to be run as a daemon
 # and to be controlled by simple start/stop/restart commands
 gem 'daemons'
