@@ -1,25 +1,25 @@
 module Repositories
   class Inventory
-    def initialize: (model: ::Entities::Inventory::ActiveRecord_Relation) -> void
+    def initialize: (model: ::Entities::Inventory::ActiveRecord_Relation | untyped) -> void
 
-    def all: () -> Array[::Entities::Inventory::ActiveRecord_Relation]
+    def all: () -> Array[::Entities::Inventory::ActiveRecord_Relation | untyped]
 
     def create: (data: Hash[Symbol, any]) -> ::Entities::Inventory::ActiveRecord_Relation
 
-    def quantity_grouped_by_store_and_model_sql: () -> PG::Result
+    def quantity_grouped_by_store_and_model: () -> (PG::Result | Array[untyped] | Hash[Symbol | String, Integer | String])
 
-    def paginate: (?page: ::Integer, ?per_page: ::Integer, ?order: ::String) -> Array[::Entities::Inventory::ActiveRecord_Relation]
+    def paginate: (?page: ::Integer, ?per_page: ::Integer, ?order: ::String) -> Array[::Entities::Inventory::ActiveRecord_Relation | untyped]
 
-    def inventory_transfer_suggestions: () -> PG::Result
+    def inventory_transfer_suggestions: () -> (PG::Result | Array[untyped] | Hash[Symbol | String, Integer | String])
 
     private
 
-    attr_reader model: ::Entities::Inventory::ActiveRecord_Relation
+    attr_reader model: ::Entities::Inventory::ActiveRecord_Relation | untyped
 
     def sum_quantity_by_store_and_model: () -> String
 
     def inventory_transfer_suggestions_sql: () -> String
 
-    def execute_raw_query: (query: String) -> PG::Result
+    def execute_raw_query: (query: String) -> (PG::Result | Array[untyped] | Hash[Symbol | String, Integer | String])
   end
 end
