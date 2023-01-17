@@ -9,10 +9,6 @@ module Repositories
       @model = model
     end
 
-    def all
-      model.all
-    end
-
     def count
       model.count
     end
@@ -41,6 +37,7 @@ module Repositories
 
     attr_reader :model
 
+    # TODO: Add a CURSOR to the query to SELECT the inventory items in batches if needed
     def sum_quantity_by_store_and_model_sql
       <<-SQL.squish
           SELECT

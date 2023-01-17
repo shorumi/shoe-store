@@ -304,3 +304,5 @@ docker-compose up
 - Implement a **Redis** cache to cache the JSON API endpoints.
 - Improve the Inventory Alert rules and email the store owner when the inventory is low.
 - Implement filters to the JSON API endpoints.
+- Explain queries and add indexes to improve the performance of the queries if needed.
+

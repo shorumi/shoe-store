@@ -48,9 +48,9 @@ module Services
           Hash: ::Serializables::InventoryTransferSuggestions
         },
         meta: {
-          page: params.fetch(:page, Utils::Pagination::PAGE_DEFAULT[:page]),
-          per_page: params.fetch(:per_page, Utils::Pagination::PAGE_DEFAULT[:per_page]),
-          order: params.fetch(:order, Utils::Pagination::PAGE_DEFAULT[:order]),
+          page: params.fetch(:page, Utils::Pagination::PAGE_DEFAULT_SETTINGS[:page]).to_i,
+          per_page: params.fetch(:per_page, Utils::Pagination::PAGE_DEFAULT_SETTINGS[:per_page]).to_i,
+          order: params.fetch(:order, Utils::Pagination::PAGE_DEFAULT_SETTINGS[:order]),
           total: inventory_transfer_suggestions.count
         }
       )

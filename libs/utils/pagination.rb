@@ -3,7 +3,7 @@ require_relative '../../app/repositories/init'
 
 module Utils
   class Pagination
-    PAGE_DEFAULT = {
+    PAGE_DEFAULT_SETTINGS = {
       page: 1,
       per_page: 10,
       order: 'DESC'
@@ -43,21 +43,21 @@ module Utils
     end
 
     def paginate_array
-      arr = collection.sort_by { |item| item.dig(:attributes, :inventory_quantity) }
+      arr = collection.sort_by { |item| item.dig(:attributes, :inventory_quantity) } # TODO: make this sort dynamic
       arr.reverse! if order == 'DESC'
       arr[((page - 1) * per_page)...(page * per_page)]
     end
 
     def page
-      params.fetch(:page, PAGE_DEFAULT[:page]).to_i
+      params.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
     end
 
     def per_page
-      params.fetch(:per_page, PAGE_DEFAULT[:per_page]).to_i
+      params.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
     end
 
     def order
-      params.fetch(:order, PAGE_DEFAULT[:order]).upcase
+      params.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
     end
   end
 end
