@@ -21,6 +21,10 @@ module Repositories
       model.create(sales_data: data)
     end
 
+    def transaction(&block)
+      model.transaction(&block)
+    end
+
     def quantity_grouped_by_store_and_model
       execute_raw_query("#{sum_quantity_by_store_and_model_sql};")
     end
