@@ -53,43 +53,42 @@ A **JSON API** endpoint was created to expose the Shoes Store Inventory, this en
 Example of the JSON API returned result:
 ```json
 {
-"data":
-[
-{
-"id": "13048",
-"type": "inventories",
-"attributes" :{
-"sales_data":{
-"id": "7b16de74-22dd-44f4-9c57-21b49cecba33",
-"model": "VENDOGNUS",
-"store": "ALDO Pheasant Lane Mall",
-"inventory":56
-},
-"created_at":"2023-01-06T04:51:02.462Z",
-"updated_at":"2023-01-06T04:51:02.462Z"
-}
-},
-{
-"id": "13047",
-"type": "inventories",
-"attributes" :{
-"sales_data":{
-"id":"81a08fd3-3b97-4525-b6bb-e7fd221e3150",
-"model": "ADERI",
-"store": "ALDO Burlington Mall",
-"inventory":77
-},
-"created_at":"2023-01-06T04:51:02.461Z",
-"updated_at":"2023-01-06T04:51:02.461Z"
-}
-}
-],
-"meta" :{
-"page" :1,
-"per_page":2,
-"order": "DESC",
-"total":12983
-}
+  "data": [
+    {
+      "id": "13048",
+      "type": "inventories",
+      "attributes" : {
+        "sales_data": {
+          "id": "7b16de74-22dd-44f4-9c57-21b49cecba33",
+          "model": "VENDOGNUS",
+          "store": "ALDO Pheasant Lane Mall",
+          "inventory":56
+        },
+      "created_at":"2023-01-06T04:51:02.462Z",
+      "updated_at":"2023-01-06T04:51:02.462Z"
+      }
+    },
+    {
+      "id": "13047",
+      "type": "inventories", 
+      "attributes" : {
+        "sales_data": {
+          "id":"81a08fd3-3b97-4525-b6bb-e7fd221e3150", 
+          "model": "ADERI",
+          "store": "ALDO Burlington Mall", 
+          "inventory":77
+        },
+        "created_at":"2023-01-06T04:51:02.461Z",
+        "updated_at":"2023-01-06T04:51:02.461Z"
+      }
+    }
+  ],
+  "meta" : {
+    "page" :1,
+    "per_page":2,
+    "order": "DESC",
+    "total":12983
+  }
 }
 ```
 
