@@ -8,9 +8,9 @@ module Business
   module Rules
     class QuantityAlert
       QUANTITY_ALERTS = {
-        'high' => -2999..0,
-        'low' => -4800..-3000,
-        'out_of_stock' => -6000..-4801
+        'high' => -200..0,
+        'low' => -480..-300,
+        'out_of_stock' => -600..-481
       }.freeze
 
       def self.call(inventory_repo = ::Repositories::Inventory.new, logger = Logger.new($stdout))
