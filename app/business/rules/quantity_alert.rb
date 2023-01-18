@@ -37,19 +37,19 @@ module Business
             quantity = row.fetch('inventory_quantity').to_i
 
             case quantity
-            when QUANTITY_ALERTS['low']
-              logger.info("Only #{quantity} shoes left for store: #{row['store']} and model: #{row['model']}")
-              publish_alert_message = build_publish_alert_message(row.merge!(alert_type: 'low_shoes_quantity'))
-
-              enqueue_alerts(publish_alert_message, priority: 9)
             when QUANTITY_ALERTS['high']
               logger.info("A High number of #{quantity} shoes for store: #{row['store']} and model: #{row['model']}")
-              publish_alert_message = build_publish_alert_message(row.merge!(alert_type: 'high_shoes_quantity'))
+              publish_alert_message = build_publish_alert_message(row.merge!('alert_type' => 'high_shoes_quantity'))
+
+              enqueue_alerts(publish_alert_message, priority: 9)
+            when QUANTITY_ALERTS['low']
+              logger.info("Only #{quantity} shoes left for store: #{row['store']} and model: #{row['model']}")
+              publish_alert_message = build_publish_alert_message(row.merge!('alert_type' => 'low_shoes_quantity'))
 
               enqueue_alerts(publish_alert_message, priority: 10)
             when QUANTITY_ALERTS['out_of_stock']
               logger.info("Out of stock for store: #{row['store']} and model: #{row['model']}")
-              publish_alert_message ||= build_publish_alert_message(row.merge!(alert_type: 'out_of_stock'))
+              publish_alert_message ||= build_publish_alert_message(row.merge!('alert_type' => 'out_of_stock'))
 
               enqueue_alerts(publish_alert_message, priority: 11)
             else

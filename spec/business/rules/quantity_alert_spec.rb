@@ -5,84 +5,42 @@ require './app/business/rules/quantity_alert'
 require './app/repositories/inventory'
 
 RSpec.describe Business::Rules::QuantityAlert do
+  RSpec.shared_examples 'quantity alert' do |alert_type, quantity, priority|
+    let(:inventory_repo) { instance_double('Repositories::Inventory') }
+    let(:logger) { instance_double('Logger') }
+    let(:row) do
+      {
+        'store' => 'store',
+        'model' => 'model',
+        'inventory_quantity' => quantity
+      }
+    end
+
+    before do
+      allow(inventory_repo).to receive(:quantity_grouped_by_store_and_model).and_return([row])
+      allow(logger).to receive(:info)
+      allow(Workers::QuantityInventoryAlerts).to receive_message_chain(:set, :perform_later)
+    end
+
+    it 'publishes an alert message' do
+      expect(Workers::QuantityInventoryAlerts.set(priority: priority)).to receive(:perform_later).with(
+        row.merge('alert_type' => alert_type)
+      )
+      described_class.call(inventory_repo, logger)
+    end
+  end
+
   describe '#call' do
     context 'High inventory quantity' do
-      before do
-        FactoryBot.create(
-          :inventory,
-          sales_data: {
-            id: SecureRandom.uuid,
-            store: 'Ompa Loompa Store',
-            model: 'Skater Shoes',
-            inventory: (Business::Rules::QuantityAlert::QUANTITY_ALERTS['high'].max) * -1
-          }
-        )
-      end
-
-      it 'Publish a HIGH quantity alert message' do
-        allow(::Workers::QuantityInventoryAlerts).to receive_message_chain(:set, :perform_later)
-
-        expect(Business::Rules::QuantityAlert.call).to be_truthy
-        expect(::Workers::QuantityInventoryAlerts.set(priority: 10)).to have_received(:perform_later).with(
-          :alert_type => 'high_shoes_quantity',
-          'inventory_quantity' => Business::Rules::QuantityAlert::QUANTITY_ALERTS['high'].max,
-          'shoes_model' => 'Skater Shoes',
-          'store' => 'Ompa Loompa Store'
-        )
-      end
+      it_behaves_like 'quantity alert', 'high_shoes_quantity', -100, 9
     end
 
     context 'Low inventory quantity' do
-      before do
-        FactoryBot.create(
-          :inventory,
-          sales_data: {
-            id: SecureRandom.uuid,
-            store: 'Ompa Loompa Store',
-            model: 'Skater Shoes',
-            inventory: (Business::Rules::QuantityAlert::QUANTITY_ALERTS['low'].max) * -1
-          }
-        )
-      end
-
-      it 'Publish a LOW quantity alert message' do
-        allow(::Workers::QuantityInventoryAlerts).to receive_message_chain(:set, :perform_later)
-
-        expect(Business::Rules::QuantityAlert.call).to be_truthy
-        expect(::Workers::QuantityInventoryAlerts.set(priority: 9)).to have_received(:perform_later).with(
-          :alert_type => 'low_shoes_quantity',
-          'inventory_quantity' => Business::Rules::QuantityAlert::QUANTITY_ALERTS['low'].max,
-          'shoes_model' => 'Skater Shoes',
-          'store' => 'Ompa Loompa Store'
-        )
-      end
+      it_behaves_like 'quantity alert', 'low_shoes_quantity', -300, 10
     end
 
     context 'Out of Stock inventory quantity' do
-      before do
-        FactoryBot.create(
-          :inventory,
-          sales_data: {
-            id: SecureRandom.uuid,
-            store: 'Ompa Loompa Store',
-            model: 'Skater Shoes',
-            inventory: (Business::Rules::QuantityAlert::QUANTITY_ALERTS['out_of_stock'].max) * -1
-          }
-        )
-      end
-
-      it 'Publish a OUT OF STOCK quantity alert message' do
-        allow(::Workers::QuantityInventoryAlerts).to receive_message_chain(:set, :perform_later)
-
-        expect(Business::Rules::QuantityAlert.call).to be_truthy
-        expect(::Workers::QuantityInventoryAlerts.set(priority: 9)).to have_received(:perform_later).with(
-          :alert_type => 'out_of_stock',
-          'inventory_quantity' => Business::Rules::QuantityAlert::QUANTITY_ALERTS['out_of_stock'].max,
-          'shoes_model' => 'Skater Shoes',
-          'store' => 'Ompa Loompa Store'
-        )
-      end
+      it_behaves_like 'quantity alert', 'out_of_stock', -500, 11
     end
   end
 end
-
