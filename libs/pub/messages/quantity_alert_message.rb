@@ -14,8 +14,8 @@ module Pub
 
         def build_message(row)
           {
-            store_id: row.fetch('store'),
-            model_id: row.fetch('model'),
+            store: row.fetch('store'),
+            model: row.fetch('model'),
             quantity: row.fetch('inventory_quantity'),
             alert_type: row.fetch('alert_type')
           }.to_json

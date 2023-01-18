@@ -9,7 +9,7 @@ module Business
     class QuantityAlert
       QUANTITY_ALERTS = {
         'high' => -200..0,
-        'low' => -480..-300,
+        'low' => -480..-201,
         'out_of_stock' => -600..-481
       }.freeze
 

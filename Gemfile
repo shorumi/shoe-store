@@ -55,6 +55,12 @@ group :test do
   gem 'rack-test'
   # SimpleCov is a code coverage analysis tool for Ruby
   gem 'simplecov', require: false
+  # A Ruby library for generating fake data such as names, addresses, and phone numbers
+  gem 'faker'
+  # Test whenever cron jobs
+  gem 'whenever-test'
+  # Handles database tests cleaning
+  gem 'database_cleaner-active_record'
 end
 
 group :development, :test do
@@ -63,5 +69,5 @@ group :development, :test do
   # Adds step-by-step debugging and stack navigation capabilities to pry using byebug.
   gem 'pry-byebug'
   # Shim to load environment variables from .env into ENV in development.
-  gem 'dotenv-rails'
+  gem 'dotenv'
 end

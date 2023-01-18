@@ -1,19 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    actionpack (7.0.4)
-      actionview (= 7.0.4)
-      activesupport (= 7.0.4)
-      rack (~> 2.0, >= 2.2.0)
-      rack-test (>= 0.6.3)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (7.0.4)
-      activesupport (= 7.0.4)
-      builder (~> 3.1)
-      erubi (~> 1.4)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.1, >= 1.2.0)
     activejob (7.0.4)
       activesupport (= 7.0.4)
       globalid (>= 0.3.6)
@@ -32,7 +19,6 @@ GEM
       bunny-publisher (~> 0.2.0)
       sneakers (~> 2.7)
     amq-protocol (2.3.2)
-    builder (3.2.4)
     bunny (2.20.1)
       amq-protocol (~> 2.3, >= 2.3.1)
       sorted_set (~> 1, >= 1.0.2)
@@ -43,14 +29,14 @@ GEM
     chronic (0.10.2)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
-    crass (1.0.6)
     daemons (1.4.1)
+    database_cleaner-active_record (2.0.1)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     diff-lcs (1.5.0)
     docile (1.4.0)
     dotenv (2.8.1)
-    dotenv-rails (2.8.1)
-      dotenv (= 2.8.1)
-      railties (>= 3.2)
     dry-configurable (1.0.1)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
@@ -87,10 +73,11 @@ GEM
       dry-initializer (~> 3.0)
       dry-schema (>= 1.12, < 2)
       zeitwerk (~> 2.6)
-    erubi (1.12.0)
     eventmachine (1.2.7)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
+    faker (3.1.0)
+      i18n (>= 1.8.11, < 2)
     faye-websocket (0.11.1)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
@@ -105,17 +92,12 @@ GEM
     jsonapi-renderer (0.2.2)
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
-    loofah (2.19.1)
-      crass (~> 1.0.2)
-      nokogiri (>= 1.5.9)
     method_source (1.0.0)
     minitest (5.16.3)
     multi_json (1.15.0)
     mustermann (1.1.2)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
-    nokogiri (1.13.10-x86_64-linux)
-      racc (~> 1.4)
     pg (1.4.5)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -125,24 +107,11 @@ GEM
       pry (>= 0.13, < 0.15)
     puma (6.0.1)
       nio4r (~> 2.0)
-    racc (1.6.2)
     rack (2.2.4)
     rack-protection (2.1.0)
       rack
     rack-test (2.0.2)
       rack (>= 1.3)
-    rails-dom-testing (2.0.3)
-      activesupport (>= 4.2.0)
-      nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.4)
-      loofah (~> 2.19, >= 2.19.1)
-    railties (7.0.4)
-      actionpack (= 7.0.4)
-      activesupport (= 7.0.4)
-      method_source
-      rake (>= 12.2)
-      thor (~> 1.0)
-      zeitwerk (~> 2.5)
     rake (13.0.6)
     rbtree (0.4.6)
     rspec (3.12.0)
@@ -201,6 +170,8 @@ GEM
     websocket-extensions (0.1.5)
     whenever (1.0.0)
       chronic (>= 0.6.3)
+    whenever-test (1.0.1)
+      whenever
     zeitwerk (2.6.6)
 
 PLATFORMS
@@ -211,10 +182,12 @@ DEPENDENCIES
   activesupport (~> 7.0, >= 7.0.4)
   advanced-sneakers-activejob
   daemons
-  dotenv-rails
+  database_cleaner-active_record
+  dotenv
   dry-monads
   dry-validation
   factory_bot
+  faker
   faye-websocket
   jsonapi-rb
   pg (~> 1.4.5)
@@ -229,6 +202,7 @@ DEPENDENCIES
   sinatra-activerecord
   sinatra-contrib
   whenever
+  whenever-test
 
 BUNDLED WITH
    2.4.1
