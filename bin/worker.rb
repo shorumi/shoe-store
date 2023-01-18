@@ -39,7 +39,7 @@ Sneakers.configure(
   # prefetch: ENV['SNEAKERS_PREFETCH'].to_i, # Grab 10 jobs together. Better speed.
   threads: 10, # Threadpool size (good to match prefetch)
   start_worker_delay: 10,
-  env: ENV['RACK_ENV'], # Environment
+  env: ENV['APP_ENV'], # Environment
   durable: true, # Is queue durable?
   ack: true, # Must we acknowledge?
   heartbeat: 2, # Keep a good connection with broker

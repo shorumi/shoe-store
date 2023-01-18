@@ -10,7 +10,7 @@ require_relative 'app/business/rules/init'
 
 desc 'Load the environment'
 task :environment do
-  @env = ENV['RACK_ENV'] || 'development'
+  @env = ENV['APP_ENV'] || 'development'
 end
 
 namespace :whenever do

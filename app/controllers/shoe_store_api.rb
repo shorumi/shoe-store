@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'sinatra/json'
-require 'sinatra/reloader'
 
 require_relative '../services/init'
 

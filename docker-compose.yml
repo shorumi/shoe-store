@@ -19,7 +19,7 @@ services:
     <<: *base_app
     entrypoint: ['sh', './entrypoint.sh']
     command: >
-      bash -c "cron && whenever --set environment=$RACK_ENV --update-crontab && RACK_ENV=$RACK_ENV bundle exec puma --config config/puma.rb"
+      bash -c "cron && whenever --set environment=$APP_ENV --update-crontab && APP_ENV=$APP_ENV bundle exec puma --config config/puma.rb"
     ports:
       - "${PORT}:${PORT}"
     env_file:

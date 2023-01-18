@@ -26,7 +26,7 @@ require_relative '../app/business/rules/init'
 
 # Learn more: http://github.com/javan/whenever
 
-rack_env = ENV['RACK_ENV'] ||= 'production'
+rack_env = ENV['APP_ENV'] ||= 'production'
 set :output, error: 'log/crontab_error.log', standard: 'log/crontab.log'
 set :environment, rack_env
 ENV.each { |k, v| env(k, v) }
