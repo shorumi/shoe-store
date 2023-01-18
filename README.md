@@ -282,7 +282,7 @@ docker-compose up
 ## Running the RSpec tests
 - In a terminal tab, run the rspec tests:
 ```shell
-  docker-compose run shoe_store_api rspec --format documentation
+  docker-compose run -e APP_ENV=test shoe_store_api rspec --format documentation
 ```
 
 ## Tech Stack
