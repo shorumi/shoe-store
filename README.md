@@ -284,6 +284,10 @@ docker-compose up
   docker-compose run -e APP_ENV=test shoe_store_api rspec --format documentation
 ```
 
+## Code Coverage
+<img width="1792" alt="Screenshot 2023-01-19 at 03 25 37" src="https://user-images.githubusercontent.com/71681750/213371507-8f4711ca-142b-4195-a960-fc20e541b387.png">
+
+
 ## Tech Stack
 - Docker
 - Docker Compose
