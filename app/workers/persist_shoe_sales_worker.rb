@@ -14,7 +14,7 @@ class PersistShoeSalesWorker < ActiveJob::Base
     inventory_repo.transaction do
       if inventory_repo.create(data: sale_data)
         logger.info("Successfully created inventory: #{sale_data}")
-        raise ActiveRecord::Rollback if ENV.fetch('SANDBOX_MODE', 'true') == 'true'
+        raise ActiveRecord::Rollback if %w[TRUE true].include?(ENV.fetch('SANDBOX_MODE', 'true'))
       else
         logger.error('Failed to create inventory')
       end

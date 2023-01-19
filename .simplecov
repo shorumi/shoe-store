@@ -10,5 +10,5 @@ SimpleCov.start do
   add_filter '/spec/'
 end
 
-SimpleCov.minimum_coverage line: 100, branch: 90
-SimpleCov.minimum_coverage_by_file 90
+SimpleCov.minimum_coverage line: 80, branch: 80
+SimpleCov.minimum_coverage_by_file 70

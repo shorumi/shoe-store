@@ -10,9 +10,11 @@ require 'factory_bot'
 require 'faker'
 require 'database_cleaner-active_record'
 
+require_relative '../../app/controllers/shoe_store_api'
+
 
 def app
-  App
+  ShoeStoreApi
 end
 
 # Checks for pending migrations and applies them before tests are run.

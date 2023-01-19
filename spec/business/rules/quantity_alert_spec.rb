@@ -42,5 +42,44 @@ RSpec.describe Business::Rules::QuantityAlert do
     context 'Out of Stock inventory quantity' do
       it_behaves_like 'quantity alert', 'out_of_stock', -500, 11
     end
+
+    context 'No inventory items found' do
+      let(:inventory_repo) { instance_double('Repositories::Inventory') }
+      let(:logger) { instance_double('Logger') }
+
+      before do
+        allow(inventory_repo).to receive(:quantity_grouped_by_store_and_model).and_return([])
+        allow(logger).to receive(:info)
+      end
+
+      it 'logs a message' do
+        expect(logger).to receive(:info).with('No inventory items found')
+
+        described_class.call(inventory_repo, logger)
+      end
+    end
+
+    context 'No alerts' do
+      let(:inventory_repo) { instance_double('Repositories::Inventory') }
+      let(:logger) { instance_double('Logger') }
+      let(:row) do
+        {
+          'store' => 'store',
+          'model' => 'model',
+          'inventory_quantity' => -1000
+        }
+      end
+
+      before do
+        allow(inventory_repo).to receive(:quantity_grouped_by_store_and_model).and_return([row])
+        allow(logger).to receive(:info)
+      end
+
+      it 'logs a message' do
+        expect(logger).to receive(:info).with('No alerts')
+
+        described_class.call(inventory_repo, logger)
+      end
+    end
   end
 end

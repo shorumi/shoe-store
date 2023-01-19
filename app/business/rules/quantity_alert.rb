@@ -32,7 +32,9 @@ module Business
 
       def perform_quantity_alerts
         logger.info('Performing quantity alerts')
-        if (inventory_items = inventory_repo.quantity_grouped_by_store_and_model)
+        if (inventory_items = inventory_repo.quantity_grouped_by_store_and_model).empty?
+          logger.info('No inventory items found')
+        else
           inventory_items.each do |row|
             quantity = row.fetch('inventory_quantity').to_i
 
@@ -53,11 +55,10 @@ module Business
 
               enqueue_alerts(publish_alert_message, priority: 11)
             else
+              logger.info('No alerts')
               next
             end
           end
-        else
-          logger.info('No inventory items found')
         end
       end
 
