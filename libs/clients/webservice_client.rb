@@ -4,7 +4,7 @@ require 'json'
 
 require_relative '../../bin/worker'
 require_relative '../../app/workers/persist_shoe_sales_worker'
-require_relative '../../libs/validators/contracts/sales_data_contract'
+require_relative '../../libs/validators/contracts/sales_data'
 
 EM.run do
   logger ||= Logger.new($stdout)
@@ -14,7 +14,7 @@ EM.run do
     if (data = JSON.parse(event.data))
       logger.info "Received: #{data}"
       logger.info("Validating expected data contract")
-      SalesDataContract.new.call(data).to_monad
+      ::Validators::Contracts::SalesData.new.call(data).to_monad
         .fmap do |validated_data|
           logger.info("Validated data: #{validated_data.to_h}")
           PersistShoeSalesWorker.perform_later(validated_data.to_h)

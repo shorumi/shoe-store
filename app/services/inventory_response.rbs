@@ -4,10 +4,10 @@ module Services
         inventory_repo: Repositories::Inventory,
         logger: Logger,
         renderer: JSONAPI::Serializable::Renderer,
-        ?success: Proc,
-        ?error: Proc,
+        success: Proc,
+        error: Proc,
         ?params: Hash[String | Symbol, untyped],
-        ?request: Hash[Symbol, untyped]
+        request: Hash[Symbol, untyped]
     ) -> untyped
 
     def call: () -> Proc

@@ -1,5 +1,8 @@
-require_relative '../../libs/utils/pagination'
+# frozen_string_literal: true
+
 require_relative '../../app/repositories/init'
+require_relative '../validators/contracts/pagination_params'
+require_relative '../errors/parameter_validation_error'
 
 module Utils
   class Pagination
@@ -10,28 +13,42 @@ module Utils
     }.freeze
 
     def self.paginate(params, collection:)
-      new(params, collection).paginate
+      new(params, collection).build_paginate
     end
 
-    def paginate
-      case collection.is_a?(Array)
-      when true
-        paginate_array
+    def build_paginate
+      if !params.blank?
+        validate_params.fmap do |validated_params|
+          sanitized_params = sanitize_params(validated_params.to_h)
+          return paginate_array(sanitized_params) if collection.is_a?(Array)
+
+          return paginate_active_record(sanitized_params)
+        end.or do |failed|
+          logger.error("Failed to validate params: #{failed.errors.to_h}")
+
+          raise Errors::ParameterValidationError.new(errors: failed.errors.to_h)
+        end
       else
-        paginate_active_record
+        collection.is_a?(Array) ? paginate_array({}) : paginate_active_record({})
       end
     end
 
     private
 
-    attr_reader :params, :collection
+    attr_reader :params, :collection, :validator, :logger
 
-    def initialize(params, collection)
+    def initialize(params, collection, validator = ::Validators::Contracts::PaginationParams.new, logger = Logger.new($stdout))
       @params = params
       @collection = collection
+      @validator = validator
+      @logger = logger
     end
 
-    def paginate_active_record
+    def paginate_active_record(args)
+      page = args.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
+      per_page = args.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
+      order = args.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
+
       page = page.to_i - 1 if page.to_i == 1
       offset = page.to_i * per_page.to_i
 
@@ -42,22 +59,30 @@ module Utils
       collection.name.gsub("#{collection.module_parent}::", '')
     end
 
-    def paginate_array
+    def paginate_array(args)
+      page = args.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
+      per_page = args.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
+      order = args.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
+
       arr = collection.sort_by { |item| item.dig(:attributes, :inventory_quantity) } # TODO: make this sort dynamic
       arr.reverse! if order == 'DESC'
       arr[((page - 1) * per_page)...(page * per_page)]
     end
 
-    def page
-      params.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
+    def validate_params
+      validator.call(params).to_monad
     end
 
-    def per_page
-      params.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
-    end
+    def sanitize_params(args)
+      page = args.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
+      per_page = args.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
+      order = args.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
 
-    def order
-      params.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
+      {
+        page:,
+        per_page:,
+        order:
+      }
     end
   end
 end

@@ -6,6 +6,7 @@ require_relative '../repositories/init'
 require_relative '../serializables/init'
 require_relative '../entities/init'
 require_relative '../../libs/utils/pagination'
+require_relative 'parameters_error_response'
 
 
 module Services
@@ -58,6 +59,8 @@ module Services
 
       logger.info "Inventory response: #{response}"
       success.call(response)
+    rescue ::Errors::ParameterValidationError => e
+      ::Services::ParametersErrorResponse.call(error:, exception: e)
     rescue StandardError => e
       logger.error("Request failed: #{e} - #{e.backtrace}")
       error.call('Unable to process request at this time, please try again later.')
