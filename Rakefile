@@ -2,6 +2,7 @@
 
 require 'rubygems'
 require 'sneakers/tasks'
+require 'sinatra/activerecord'
 require 'sinatra/activerecord/rake'
 require 'bundler/setup'
 require './bin/worker'

@@ -24,7 +24,7 @@ module Validators
         next if Validators::Contracts::PaginationParams::ALLOWED_URI_QUERY.include?(key)
 
         e =  Errors::ParameterValidationError.new(errors: { key => 'is not allowed' })
-        ::Services::ParametersErrorResponse.call(error: error, exception: e)
+        ::Services::ParametersErrorResponse.call(error:, exception: e)
       end
     end
   end
