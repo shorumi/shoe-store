@@ -1,0 +1,19 @@
+module Errors
+  class StandardError < ::StandardError
+    def initialize: (?title: ::String?, ?detail: ::String?, ?status: ::Integer?, ?source: ::Hash[String | Symbol, untyped]) -> void
+
+    def to_h: () -> { status: Integer, title: String, detail: String, source: ::Hash[String | Symbol, untyped] }
+
+    def serializable_hash: () -> ::Hash[String | Symbol, untyped]
+
+    def to_s: () -> String
+
+    attr_reader title: String
+
+    attr_reader detail: String
+
+    attr_reader status: Integer
+
+    attr_reader source: ::Hash[String | Symbol, untyped]
+  end
+end

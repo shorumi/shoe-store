@@ -1,0 +1,11 @@
+module Errors
+  class ParameterValidationError < ::Errors::StandardError
+    def initialize: (errors: (Array[Hash[String | Symbol, untyped]] | Hash[String | Symbol, untyped])) -> ParameterValidationError
+
+    def serializable_hash: () -> Hash[String | Symbol, untyped]
+
+    private
+
+    attr_reader errors: untyped
+  end
+end

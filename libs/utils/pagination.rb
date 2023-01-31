@@ -29,7 +29,7 @@ module Utils
           raise Errors::ParameterValidationError.new(errors: failed.errors.to_h)
         end
       else
-        collection.is_a?(Array) ? paginate_array({}) : paginate_active_record({})
+        collection.is_a?(Array) ? paginate_array(sanitize_params(params)) : paginate_active_record(sanitize_params(params))
       end
     end
 
@@ -45,9 +45,9 @@ module Utils
     end
 
     def paginate_active_record(args)
-      page = args.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
-      per_page = args.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
-      order = args.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
+      page = args[:page]
+      per_page = args[:per_page]
+      order = args[:order]
 
       page = page.to_i - 1 if page.to_i == 1
       offset = page.to_i * per_page.to_i
@@ -60,9 +60,9 @@ module Utils
     end
 
     def paginate_array(args)
-      page = args.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
-      per_page = args.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
-      order = args.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
+      page = args[:page]
+      per_page = args[:per_page]
+      order = args[:order]
 
       arr = collection.sort_by { |item| item.dig(:attributes, :inventory_quantity) } # TODO: make this sort dynamic
       arr.reverse! if order == 'DESC'
@@ -74,14 +74,10 @@ module Utils
     end
 
     def sanitize_params(args)
-      page = args.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i
-      per_page = args.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i
-      order = args.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
-
       {
-        page:,
-        per_page:,
-        order:
+        page: args.fetch(:page, PAGE_DEFAULT_SETTINGS[:page]).to_i,
+        per_page: args.fetch(:per_page, PAGE_DEFAULT_SETTINGS[:per_page]).to_i,
+        order: args.fetch(:order, PAGE_DEFAULT_SETTINGS[:order]).upcase
       }
     end
   end
