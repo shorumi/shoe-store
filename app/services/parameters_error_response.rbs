@@ -1,6 +1,6 @@
 module Services
   class ParametersErrorResponse
-    def self.call: (?logger: Logger, ?renderer: JSONAPI::Serializable::Renderer, error: Proc, exception: String) -> untyped
+    def self.call: (?logger: Logger, ?renderer: JSONAPI::Serializable::Renderer, error: Proc, exception: Errors::ParameterValidationError) -> Proc
 
     def call: () -> Proc
 
@@ -12,9 +12,14 @@ module Services
 
     attr_reader error: Proc
 
-    attr_reader exception: Hash[String | Symbol, untyped]
+    attr_reader exception: Errors::ParameterValidationError
 
-    def initialize: (Logger logger, JSONAPI::Serializable::Renderer renderer, Proc error, String exception) -> Services::ParametersErrorResponse
+    def initialize: (
+        Logger logger,
+        JSONAPI::Serializable::Renderer renderer,
+        Proc error,
+        Errors::ParameterValidationError exception
+    ) -> Services::ParametersErrorResponse
 
     def build_parameter_error_response: () -> Proc
   end

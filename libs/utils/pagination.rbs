@@ -1,35 +1,42 @@
 module Utils
   class Pagination
-    PAGE_DEFAULT_SETTINGS: ::Hash[::Symbol, ::Integer | ::String]
+    PAGE_DEFAULT_SETTINGS: { page: 1, per_page: 10, order: "DESC" }
 
-    def self.paginate: (::Hash[Symbol, (String | Integer)] params, collection: (::Entities::Inventory::ActiveRecord_Relation | Array[(Hash[String | Symbol, untype])])) -> untyped
+    def self.paginate: (
+        { page: Integer,
+        per_page: Integer,
+        order: String } params,
+        Entities::Inventory::ActiveRecord_Relation | Array[(Hash[String | Symbol, String | Integer])] collection
+    ) -> (Array[(::Hash[String | Symbol, String | Integer])] | ::Entities::Inventory::ActiveRecord_Relation | Errors::ParameterValidationError)
 
-    def build_paginate: () -> (Array[(Hash[String | Symbol, untype])] | ::Entities::Inventory::ActiveRecord_Relation | Errors::ParameterValidationError)
+    def build_paginate: () -> (
+        Array[(::Hash[String | Symbol, String | Integer])] | ::Entities::Inventory::ActiveRecord_Relation | Errors::ParameterValidationError
+    )
 
     private
 
-    attr_reader params: Hash[Symbol, (String | Integer)]
+    attr_reader params: { page: Integer, per_page: Integer, order: String }
 
-    attr_reader collection: (Array[(Hash[String | Symbol, untype])] | ::Entities::Inventory::ActiveRecord_Relation)
+    attr_reader collection: (Array[(Hash[String | Symbol, (String | Integer)])] | ::Entities::Inventory::ActiveRecord_Relation)
 
     attr_reader validator: ::Validators::Contracts::PaginationParams
 
     attr_reader logger: Logger
 
     def initialize: (
-        Hash[Symbol, (String | Integer)] params,
-        (Array[(Hash[String | Symbol, untype])] | ::Entities::Inventory::ActiveRecord_Relation) collection,
+        { page: Integer, per_page: Integer, order: String } params,
+        (Array[(Hash[String | Symbol, (String | Symbol)])] | ::Entities::Inventory::ActiveRecord_Relation) collection,
         ::Validators::Contracts::PaginationParams validator, Logger logger
     ) -> Utils::Pagination
 
-    def paginate_active_record: (::Hash[Symbol, (String | Integer)] args) -> ::Entities::Inventory::ActiveRecord_Relation
+    def paginate_active_record: (page: Integer, per_page: Integer, order: String args) -> ::Entities::Inventory::ActiveRecord_Relation
 
     def collection_klass_name: () -> String
 
-    def paginate_array: (::Hash[Symbol, (String | Integer)] args) -> Array[::Hash[String | Symbol, String | Integer]])
+    def paginate_array: (page: Integer, per_page: Integer, order: String) -> Array[::Hash[String | Symbol, String | Integer]]
 
     def validate_params: () -> Dry::Monad::Result
 
-    def sanitize_params: (::Hash[Symbol, (String | Integer)] args) -> { page: Integer, per_page: Integer, order: String }
+    def sanitize_params: (page: Integer, per_page: Integer, order: String args) -> { page: Integer, per_page: Integer, order: String }
   end
 end

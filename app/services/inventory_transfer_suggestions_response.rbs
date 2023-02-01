@@ -6,7 +6,7 @@ module Services
         renderer: JSONAPI::Serializable::Renderer,
         ?success: Proc,
         ?error: Proc,
-        ?params: Hash[String | Symbol, untyped],
+        ?params: Hash[Symbol, String | Integer],
         ?request: Hash[Symbol, untyped]
       ) -> untyped
 
@@ -24,7 +24,7 @@ module Services
 
     attr_reader error: Proc
 
-    attr_reader params: Hash[String | Symbol, untyped]
+    attr_reader params: Hash[Symbol, String | Integer]
 
     attr_reader request: Hash[Symbol, untyped]
 
@@ -34,7 +34,7 @@ module Services
         renderer: JSONAPI::Serializable::Renderer,
         success: Proc,
         error: Proc,
-        params: Hash[String | Symbol, untyped],
+        params: Hash[Symbol, String | Integer],
         request: Hash[Symbol, untyped]
       ) -> InventoryTransferSuggestionsResponse
 

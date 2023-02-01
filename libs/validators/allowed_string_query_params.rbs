@@ -1,0 +1,17 @@
+module Validators
+  class AllowedStringQueryParams
+    def self.validate: (error: Proc, params: ::Hash[Symbol | String, String | Integer]) -> Proc
+
+    def validate: () -> Proc
+
+    private
+
+    attr_reader error: Proc
+
+    attr_reader params: ::Hash[Symbol | String, String | Integer]
+
+    def initialize: (Proc error, ::Hash[Symbol | String, String | Integer] params) -> Validators::AllowedStringQueryParams
+
+    def string_query_params_validation: () -> (Proc | Array[nil])
+  end
+end

@@ -20,12 +20,18 @@ module Validators
     end
 
     def string_query_params_validation
+      exceptions = {}
+
       params.each_key do |key|
         next if Validators::Contracts::PaginationParams::ALLOWED_URI_QUERY.include?(key)
 
-        e =  Errors::ParameterValidationError.new(errors: { key => 'is not allowed' })
-        ::Services::ParametersErrorResponse.call(error:, exception: e)
+        exceptions[key] = 'is not allowed'
       end
+
+      return unless exceptions.any?
+
+      e = Errors::ParameterValidationError.new(errors: exceptions)
+      ::Services::ParametersErrorResponse.call(error:, exception: e)
     end
   end
 end

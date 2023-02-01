@@ -66,7 +66,7 @@ module Utils
 
       arr = collection.sort_by { |item| item.dig(:attributes, :inventory_quantity) } # TODO: make this sort dynamic
       arr.reverse! if order == 'DESC'
-      arr[((page - 1) * per_page)...(page * per_page)]
+      arr[((page - 1) * per_page)...(page * per_page)] unless arr.empty?
     end
 
     def validate_params

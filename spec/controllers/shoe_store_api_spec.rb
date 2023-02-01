@@ -177,7 +177,7 @@ RSpec.describe app do
         let!(:inventory_transfer_suggestions) { [] }
         let(:expected_inventory_transfer_suggestions_attrs) do
           {
-            'data' => [],
+            'data' => nil,
             'meta' => {
               'page' => page,
               'per_page' => per_page,
